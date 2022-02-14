@@ -37,7 +37,7 @@ public class EspecieService {
         return repository.save(especieDb);
     }
 
-    public void deleteById(long id) {
+    public void deleteEspecieById(long id) {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else {

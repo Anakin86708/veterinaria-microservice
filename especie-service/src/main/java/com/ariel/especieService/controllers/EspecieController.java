@@ -85,7 +85,7 @@ public class EspecieController {
     @CacheEvict(value = "especie", key = "'especie_' + #id")
     public ResponseEntity<Void> deleteEspecieById(@PathVariable long id) {
         try {
-            especieService.deleteById(id);
+            especieService.deleteEspecieById(id);
             return ResponseEntity.ok().build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();

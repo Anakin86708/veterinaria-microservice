@@ -11,7 +11,7 @@
     <groupId>com.ariel</groupId>
     <artifactId>especie-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>especie-template</name>
+    <name>especie-service</name>
     <description>Service for espécie</description>
     <properties>
         <java.version>11</java.version>
