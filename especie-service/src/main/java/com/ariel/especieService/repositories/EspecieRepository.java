@@ -13,7 +13,7 @@ public interface EspecieRepository extends JpaRepository<Especie, Long> {
     @Cacheable(value = "especie", key = "'especie_' + #aLong")
     Optional<Especie> findById(Long aLong);
 
-    Especie findByNome(String nome);
+    Optional<Especie> findByNome(String nome);
 
     boolean existsByNome(String nome);
 }

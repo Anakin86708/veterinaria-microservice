@@ -70,6 +70,11 @@ public class EspecieController {
         return model;
     }
 
+    @GetMapping("/byName/{name}")
+    public Especie getEspecieByName(@PathVariable String name) {
+        return especieService.getByNome(name);
+    }
+
     @PutMapping("/{id}")
     @CacheEvict(value = "especie", key = "'especie_' + #id")
     public ResponseEntity<Especie> updateEspecie(@PathVariable long id, @Valid @RequestBody Especie especie) {

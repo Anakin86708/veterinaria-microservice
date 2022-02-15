@@ -44,4 +44,8 @@ public class EspecieService {
             throw new ResourceNotFoundException(id);
         }
     }
+
+    public Especie getByNome(String name) {
+        return repository.findByNome(name).orElseThrow(() -> new ResourceNotFoundException(name));
+    }
 }
