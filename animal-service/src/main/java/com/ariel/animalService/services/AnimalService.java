@@ -38,7 +38,7 @@ public class AnimalService {
     public Animal insertAnimalForClienteId(Animal animal, long idCliente) {
         animal.setEspecie(especieProxy.retrieveEspecieByName(animal.getEspecie().getNome()));
         animal.setClientePertencente(clienteProxy.retrieveClienteById(idCliente));
-        return repository.save(animal);
+        return saveAnimal(animal);
     }
 
     public Animal updateAnimal(long updatedId, Animal animal) {
@@ -48,7 +48,7 @@ public class AnimalService {
         animalBd.setEspecie(especieProxy.retrieveEspecieByName(animal.getEspecie().getNome()));
         animalBd.setClientePertencente(clienteProxy.retrieveClienteById(animal.getClientePertencente().getId()));
         animalBd.setSexo(Sexo.valueOf(animal.getSexo().name()));
-        return repository.save(animalBd);
+        return saveAnimal(animalBd);
     }
 
     public void deleteAnimal(long id) {
@@ -57,5 +57,9 @@ public class AnimalService {
         } else {
             throw new ResourceNotFoundException(id);
         }
+    }
+
+    private Animal saveAnimal(Animal animalBd) {
+        return repository.save(animalBd);
     }
 }

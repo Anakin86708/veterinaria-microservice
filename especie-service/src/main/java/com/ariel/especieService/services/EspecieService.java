@@ -24,17 +24,27 @@ public class EspecieService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public Especie getByNome(String name) {
+        return repository.findByNome(name).orElseThrow(() -> new ResourceNotFoundException(name));
+    }
+
     public Especie insertEspecie(Especie especie) {
         if (repository.existsByNome(especie.getNome()))
             throw new DuplicateUniqueResourceException("Espécie with name " + especie.getNome() + " already present");
 
-        return repository.save(especie);
+        return saveEspecie(especie);
     }
 
     public Especie updateEspecie(long updatedId, Especie especie) {
-        Especie especieDb = getById(updatedId);
-        especieDb.setNome(especie.getNome());
-        return repository.save(especieDb);
+        try {
+            Especie especieDb = getById(updatedId);
+            especieDb.setNome(especie.getNome());
+            return saveEspecie(especieDb);
+        } catch (Exception e) {
+            throw new DuplicateUniqueResourceException(
+                    String.format("Trying to insert an entry with name [%s] that already exists", especie.getNome())
+            );
+        }
     }
 
     public void deleteEspecieById(long id) {
@@ -45,7 +55,7 @@ public class EspecieService {
         }
     }
 
-    public Especie getByNome(String name) {
-        return repository.findByNome(name).orElseThrow(() -> new ResourceNotFoundException(name));
+    private Especie saveEspecie(Especie especieDb) {
+        return repository.save(especieDb);
     }
 }

@@ -23,7 +23,7 @@ public class ClienteService {
     }
 
     public Cliente insertCliente(Cliente cliente) {
-        return repository.save(cliente);
+        return saveCliente(cliente);
     }
 
     public Cliente updateCliente(long updatedId, Cliente cliente) {
@@ -33,7 +33,7 @@ public class ClienteService {
         clienteDb.setEndereco(cliente.getEndereco());
         clienteDb.setTelefone(cliente.getTelefone());
         clienteDb.setEmail(cliente.getEmail());
-        return repository.save(clienteDb);
+        return saveCliente(clienteDb);
     }
 
     public void deleteClienteById(long id) {
@@ -42,5 +42,9 @@ public class ClienteService {
         } else {
             throw new ResourceNotFoundException(id);
         }
+    }
+
+    private Cliente saveCliente(Cliente clienteDb) {
+        return repository.save(clienteDb);
     }
 }

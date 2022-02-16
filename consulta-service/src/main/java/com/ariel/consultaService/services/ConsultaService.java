@@ -41,7 +41,7 @@ public class ConsultaService {
     public Consulta insertConsulta(Consulta consulta) {
         consulta.setAnimal(animalProxy.retrieveAnimalById(consulta.getAnimal().getId()));
         consulta.setVeterinario(veterinarioProxy.retrieveVeterinarioById(consulta.getVeterinario().getId()));
-        return repository.save(consulta);
+        return saveConsulta(consulta);
     }
 
     public Consulta updateConsulta(long updatedId, Consulta consulta) {
@@ -51,7 +51,7 @@ public class ConsultaService {
         consultaDb.setFinalizado(consulta.isFinalizado());
         consultaDb.setAnimal(animalProxy.retrieveAnimalById(consulta.getAnimal().getId()));
         consultaDb.setVeterinario(veterinarioProxy.retrieveVeterinarioById(consulta.getVeterinario().getId()));
-        return repository.save(consultaDb);
+        return saveConsulta(consultaDb);
     }
 
     public void deleteConsulta(long id) {
@@ -60,5 +60,9 @@ public class ConsultaService {
         } else {
             throw new ResourceNotFoundException(id);
         }
+    }
+
+    private Consulta saveConsulta(Consulta consultaDb) {
+        return repository.save(consultaDb);
     }
 }

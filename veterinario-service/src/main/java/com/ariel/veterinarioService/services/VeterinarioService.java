@@ -25,7 +25,7 @@ public class VeterinarioService {
     }
 
     public Veterinario insertVeterinario(Veterinario veterinario) {
-        return repository.save(veterinario);
+        return saveVeterinario(veterinario);
     }
 
     public Veterinario updateVeterinario(long updatedId, Veterinario veterinario) {
@@ -33,7 +33,7 @@ public class VeterinarioService {
         veterinarioDb.setNome(veterinario.getNome());
         veterinarioDb.setEndereco(veterinario.getEndereco());
         veterinarioDb.setTelefone(veterinario.getTelefone());
-        return repository.save(veterinarioDb);
+        return saveVeterinario(veterinarioDb);
     }
 
     public void deleteVeterinarioById(long id) {
@@ -43,8 +43,11 @@ public class VeterinarioService {
             } catch (Exception e) {
                 throw new ActiveForeignKeyException(id);
             }
-        } else {
+        } else
             throw new ResourceNotFoundException(id);
-        }
+    }
+
+    private Veterinario saveVeterinario(Veterinario veterinarioDb) {
+        return repository.save(veterinarioDb);
     }
 }

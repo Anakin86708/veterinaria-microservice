@@ -22,26 +22,22 @@ public class ConsultasController {
 
     @GetMapping()
     public ResponseEntity<List<Consulta>> getAllConsultas() {
-        List<Consulta> consultas = consultaService.getAll();
-        return ResponseEntity.ok(consultas);
+        return ResponseEntity.ok(consultaService.getAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Consulta> getConsultaById(@PathVariable long id) {
-        Consulta consulta = consultaService.getById(id);
-        return ResponseEntity.ok(consulta);
+        return ResponseEntity.ok(consultaService.getById(id));
     }
 
     @GetMapping("/animal/{id}")
     public ResponseEntity<List<Consulta>> getConsultasByIdAnimal(@PathVariable long id) {
-        List<Consulta> consultas = consultaService.getConsultasByIdAnimal(id);
-        return ResponseEntity.ok(consultas);
+        return ResponseEntity.ok(consultaService.getConsultasByIdAnimal(id));
     }
 
     @GetMapping("/veterinario/{id}")
     public ResponseEntity<List<Consulta>> getConsultasByIdVeterinario(@PathVariable long id) {
-        List<Consulta> consultas = consultaService.getConsultasByIdVeterinario(id);
-        return ResponseEntity.ok(consultas);
+        return ResponseEntity.ok(consultaService.getConsultasByIdVeterinario(id));
     }
 
     @PostMapping()
