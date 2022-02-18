@@ -1,0 +1,138 @@
+version: '3'
+services:
+  config-server:
+    image: 'anakin86708/veterinaria-config-server:0.0.1-SNAPSHOT'
+    ports:
+      - '8888:8888'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - naming-server
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - SPRING.CLOUD.CONFIG.SERVER.GIT.URI=file:///config-server-repo
+    volumes:
+      - /home/atadeu/Documents/Trilha_capacitacao/projetoVeterinariaMicroservices/git-config-repo:/config-server-repo
+
+  api-gateway:
+    image: 'anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT'
+    ports:
+      - '8765:8765'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - config-server
+      - naming-server
+      - zipkin
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'CONFIGSERVER.URL=http://config-server:8888'
+
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - '9411:9411'
+    restart:
+      unless-stopped
+    networks:
+      - veterinaria-network
+
+  naming-server:
+    image: 'anakin86708/veterinaria-naming-server:0.0.1-SNAPSHOT'
+    ports:
+      - '8761:8761'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+
+  especie-service:
+    image: 'anakin86708/especie-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8400:8400'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - config-server
+      - api-gateway
+      - naming-server
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'CONFIGSERVER.URL=http://config-server:8888'
+
+  veterinario-service:
+    image: 'anakin86708/veterinario-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8500:8500'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - config-server
+      - api-gateway
+      - naming-server
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'CONFIGSERVER.URL=http://config-server:8888'
+
+  animal-service:
+    image: 'anakin86708/animal-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8100:8100'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - config-server
+      - api-gateway
+      - naming-server
+      - especie-service
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'CONFIGSERVER.URL=http://config-server:8888'
+
+  cliente-service:
+    image: 'anakin86708/cliente-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8200:8200'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - config-server
+      - api-gateway
+      - naming-server
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'CONFIGSERVER.URL=http://config-server:8888'
+
+  consulta-service:
+    image: 'anakin86708/consulta-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8300:8300'
+    networks:
+      - veterinaria-network
+    restart:
+      "no"
+    depends_on:
+      - config-server
+      - api-gateway
+      - naming-server
+      - veterinario-service
+      - animal-service
+      - cliente-service
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'CONFIGSERVER.URL=http://config-server:8888'
+
+networks:
+  veterinaria-network: null
