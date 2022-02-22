@@ -1,5 +1,6 @@
 package com.ariel.animalService.exceptions;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,7 +20,7 @@ public class CustomResponseEntiryExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity<>(response, httpStatus);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler({ResourceNotFoundException.class, FeignException.NotFound.class})
     public final ResponseEntity<ExceptionResponse> handleResourceNotFoundException(Exception e, WebRequest request) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         ExceptionResponse response = new ExceptionResponse(httpStatus, "Resource not found", e.getMessage(), request.getDescription(false));
