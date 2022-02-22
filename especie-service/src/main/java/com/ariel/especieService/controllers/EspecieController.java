@@ -32,8 +32,8 @@ public class EspecieController {
         return ResponseEntity.ok(especieService.getById(id));
     }
 
-    @GetMapping("/byName/{name}")
-    public Especie getEspecieByName(@PathVariable String name) {
+    @GetMapping("/byName")
+    public Especie getEspecieByName(@RequestParam String name) {
         return especieService.getByNome(name);
     }
 
