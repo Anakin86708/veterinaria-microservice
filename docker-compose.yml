@@ -7,28 +7,18 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=veterinaria
-
-  config-server:
-    image: 'anakin86708/veterinaria-config-server:0.0.1-SNAPSHOT'
-    ports:
-      - '8888:8888'
-    restart: 'no'
-    depends_on:
-      - naming-server
-    environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - MYSQL_USER=appuser
+      - MYSQL_PASSWORD=1234
   api-gateway:
     image: 'anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT'
     ports:
       - '8765:8765'
     restart: 'no'
     depends_on:
-      - config-server
       - naming-server
       - zipkin
     environment:
       - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CONFIGSERVER.URL=http://config-server:8888'
   zipkin:
     image: openzipkin/zipkin
     ports:
@@ -45,60 +35,53 @@ services:
       - '8400:8400'
     restart: 'no'
     depends_on:
-      - config-server
       - api-gateway
       - naming-server
       - mysql
     environment:
       - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CONFIGSERVER.URL=http://config-server:8888'
   veterinario-service:
     image: 'anakin86708/veterinario-service:0.0.1-SNAPSHOT'
     ports:
       - '8500:8500'
     restart: 'no'
     depends_on:
-      - config-server
       - api-gateway
       - naming-server
       - mysql
     environment:
       - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CONFIGSERVER.URL=http://config-server:8888'
   animal-service:
     image: 'anakin86708/animal-service:0.0.1-SNAPSHOT'
     ports:
       - '8100:8100'
     restart: 'no'
     depends_on:
-      - config-server
       - api-gateway
       - naming-server
       - especie-service
       - mysql
     environment:
       - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CONFIGSERVER.URL=http://config-server:8888'
+      - 'CLIENTE_SERVICE_URL=http://cliente-service'
+      - 'ESPECIE_SERVICE_URL=http://especie-service'
   cliente-service:
     image: 'anakin86708/cliente-service:0.0.1-SNAPSHOT'
     ports:
       - '8200:8200'
     restart: 'no'
     depends_on:
-      - config-server
       - api-gateway
       - naming-server
       - mysql
     environment:
       - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CONFIGSERVER.URL=http://config-server:8888'
   consulta-service:
     image: 'anakin86708/consulta-service:0.0.1-SNAPSHOT'
     ports:
       - '8300:8300'
     restart: 'no'
     depends_on:
-      - config-server
       - api-gateway
       - naming-server
       - veterinario-service
@@ -107,4 +90,5 @@ services:
       - mysql
     environment:
       - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CONFIGSERVER.URL=http://config-server:8888'
+      - 'ANIMAL_SERVICE_URL=http://animal-service'
+      - 'VETERINARIO_SERVICE_URL=http://veterinario-service'
