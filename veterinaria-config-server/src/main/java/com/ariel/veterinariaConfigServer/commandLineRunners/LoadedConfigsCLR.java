@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @Component
 public class LoadedConfigsCLR implements CommandLineRunner {
 
-    private final Logger logger = LoggerFactory.getLogger(LoggerFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(LoadedConfigsCLR.class);
 
 
     @Autowired

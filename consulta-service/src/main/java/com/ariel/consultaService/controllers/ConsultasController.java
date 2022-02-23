@@ -1,7 +1,9 @@
 package com.ariel.consultaService.controllers;
 
+import com.ariel.consultaService.exceptions.ResourceUnavailableException;
 import com.ariel.consultaService.models.Consulta;
 import com.ariel.consultaService.services.ConsultaService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +43,15 @@ public class ConsultasController {
     }
 
     @PostMapping()
+    @CircuitBreaker(name = "insertConsultaBreaker", fallbackMethod = "insertConsultaFallback")
     public ResponseEntity<Consulta> insertConsulta(@Valid @RequestBody Consulta consulta) {
         Consulta savedConsulta = consultaService.insertConsulta(consulta);
         URI uri = linkTo(methodOn(this.getClass()).getConsultaById(savedConsulta.getId())).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    public ResponseEntity<Consulta> insertConsultaFallback(@Valid @RequestBody Consulta consulta, Exception e) {
+        throw new ResourceUnavailableException(e);
     }
 
     @PutMapping("/{id}")

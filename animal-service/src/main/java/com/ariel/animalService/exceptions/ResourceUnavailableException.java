@@ -1,0 +1,11 @@
+package com.ariel.animalService.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+public class ResourceUnavailableException extends RuntimeException {
+    public ResourceUnavailableException(Exception e) {
+        super(e.getMessage());
+    }
+}

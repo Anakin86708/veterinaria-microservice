@@ -1,86 +1,94 @@
-version: '3'
+version: "3"
 services:
   mysql:
     image: mysql
-    ports:
-      - '3306:3306'
+    expose:
+      - "3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=veterinaria
       - MYSQL_USER=appuser
       - MYSQL_PASSWORD=1234
+    volumes:
+      - "veterinaria_bd:/var/lib/mysql:rw"
   api-gateway:
-    image: 'anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT'
+    image: "anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT"
     ports:
-      - '8765:8765'
-    restart: 'no'
+      - "8765:8765"
+    restart: "no"
     depends_on:
       - naming-server
       - zipkin
     environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
   zipkin:
     image: openzipkin/zipkin
     ports:
-      - '9411:9411'
+      - "9411:9411"
     restart: unless-stopped
   naming-server:
-    image: 'anakin86708/veterinaria-naming-server:0.0.1-SNAPSHOT'
+    image: "anakin86708/veterinaria-naming-server:0.0.1-SNAPSHOT"
     ports:
-      - '8761:8761'
-    restart: 'no'
+      - "8761:8761"
+    restart: "no"
   especie-service:
-    image: 'anakin86708/especie-service:0.0.1-SNAPSHOT'
-    ports:
-      - '8400:8400'
-    restart: 'no'
+    image: "anakin86708/especie-service:0.0.1-SNAPSHOT"
+    expose:
+      - "8400"
+    restart: "no"
+    deploy:
+      replicas: 2
     depends_on:
       - api-gateway
       - naming-server
       - mysql
     environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
   veterinario-service:
-    image: 'anakin86708/veterinario-service:0.0.1-SNAPSHOT'
-    ports:
-      - '8500:8500'
-    restart: 'no'
+    image: "anakin86708/veterinario-service:0.0.1-SNAPSHOT"
+    expose:
+      - "8500"
+    restart: "no"
+    deploy:
+      replicas: 2
     depends_on:
       - api-gateway
       - naming-server
       - mysql
     environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
   animal-service:
-    image: 'anakin86708/animal-service:0.0.1-SNAPSHOT'
-    ports:
-      - '8100:8100'
-    restart: 'no'
+    image: "anakin86708/animal-service:0.0.1-SNAPSHOT"
+    expose:
+      - "8100"
+    restart: "no"
+    deploy:
+      replicas: 2
     depends_on:
       - api-gateway
       - naming-server
       - especie-service
       - mysql
     environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'CLIENTE_SERVICE_URL=http://cliente-service'
-      - 'ESPECIE_SERVICE_URL=http://especie-service'
+      - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+      - "CLIENTE_SERVICE_URL=http://cliente-service"
+      - "ESPECIE_SERVICE_URL=http://especie-service"
   cliente-service:
-    image: 'anakin86708/cliente-service:0.0.1-SNAPSHOT'
-    ports:
-      - '8200:8200'
-    restart: 'no'
+    image: "anakin86708/cliente-service:0.0.1-SNAPSHOT"
+    expose:
+      - "8200"
+    restart: "no"
     depends_on:
       - api-gateway
       - naming-server
       - mysql
     environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
   consulta-service:
-    image: 'anakin86708/consulta-service:0.0.1-SNAPSHOT'
-    ports:
-      - '8300:8300'
-    restart: 'no'
+    image: "anakin86708/consulta-service:0.0.1-SNAPSHOT"
+    expose:
+      - "8300"
+    restart: "no"
     depends_on:
       - api-gateway
       - naming-server
@@ -89,6 +97,9 @@ services:
       - cliente-service
       - mysql
     environment:
-      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
-      - 'ANIMAL_SERVICE_URL=http://animal-service'
-      - 'VETERINARIO_SERVICE_URL=http://veterinario-service'
+      - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+      - "ANIMAL_SERVICE_URL=http://animal-service"
+      - "VETERINARIO_SERVICE_URL=http://veterinario-service"
+volumes:
+  veterinaria_bd:
+  
