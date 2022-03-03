@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Especie {
@@ -12,6 +13,7 @@ public class Especie {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank
     private String nome;
 
     public Especie() {
