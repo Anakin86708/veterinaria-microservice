@@ -57,7 +57,7 @@ class ClienteControllerTest {
     }
 
     @Test
-    void getClienteByIdInvalid() throws Exception {
+    void getClienteByIdThrowResourceNotFoundException() throws Exception {
         doThrow(new ResourceNotFoundException(0L)).when(mockService).getById(0L);
         MockHttpServletRequestBuilder request = get("/clientes/0").contentType(MediaType.APPLICATION_JSON);
 
@@ -110,6 +110,19 @@ class ClienteControllerTest {
         ResultActions result = mockMvc.perform(request);
 
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    void updateClienteInalid() throws Exception {
+        long id = 0L;
+        Cliente cliente = spy(new Cliente(null, new Date(Instant.now().toEpochMilli() - 1000), "Rua 1", "123", "teste@mail.com"));
+        when(cliente.getId()).thenReturn(id);
+        MockHttpServletRequestBuilder request = put("/clientes/" + id)
+                .content(getGson().toJson(cliente, Cliente.class)).contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions result = mockMvc.perform(request);
+
+        result.andExpect(status().isBadRequest());
     }
 
     @Test
