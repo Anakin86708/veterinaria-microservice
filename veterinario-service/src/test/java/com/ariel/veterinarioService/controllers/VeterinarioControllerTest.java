@@ -1,5 +1,7 @@
 package com.ariel.veterinarioService.controllers;
 
+import com.ariel.veterinarioService.exceptions.ActiveForeignKeyException;
+import com.ariel.veterinarioService.exceptions.ResourceNotFoundException;
 import com.ariel.veterinarioService.models.Veterinario;
 import com.ariel.veterinarioService.services.VeterinarioService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,6 +53,18 @@ class VeterinarioControllerTest {
         ResultActions result = mockMvc.perform(request);
 
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void getVeterinarioByIdThrowResourceNotFoundException() throws Exception {
+        doThrow(new ResourceNotFoundException(0L)).when(mockService).getById(0L);
+        MockHttpServletRequestBuilder request = get("/veterinarios/0").contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions result = mockMvc.perform(request);
+
+        result
+                .andExpect(status().isNotFound())
+                .andExpect(r -> assertTrue(r.getResolvedException() instanceof ResourceNotFoundException));
     }
 
     @Test
@@ -94,11 +108,47 @@ class VeterinarioControllerTest {
     }
 
     @Test
+    public void updateVeterinarioInvalid() throws Exception {
+        Veterinario veterinario = spy(new Veterinario(null, "Rua 1", "123"));
+        when(veterinario.getId()).thenReturn(0L);
+        MockHttpServletRequestBuilder request = put("/veterinarios/0")
+                .content(new Gson().toJson(veterinario, Veterinario.class)).contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions result = mockMvc.perform(request);
+
+        result.andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void deleteVeterinarioByIdValid() throws Exception {
         MockHttpServletRequestBuilder request = delete("/veterinarios/0").contentType(MediaType.APPLICATION_JSON);
 
         ResultActions result = mockMvc.perform(request);
 
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteVeterinarioByIdThrowActiveForeignKeyException() throws Exception {
+        doThrow(new ActiveForeignKeyException(0L)).when(mockService).deleteVeterinarioById(0L);
+        MockHttpServletRequestBuilder request = delete("/veterinarios/0").contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions result = mockMvc.perform(request);
+
+        result
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(r -> assertTrue(r.getResolvedException() instanceof ActiveForeignKeyException));
+    }
+
+    @Test
+    public void deleteVeterinarioByIdThrowResourceNotFoundException() throws Exception {
+        doThrow(new ResourceNotFoundException(0L)).when(mockService).deleteVeterinarioById(0L);
+        MockHttpServletRequestBuilder request = delete("/veterinarios/0").contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions result = mockMvc.perform(request);
+
+        result
+                .andExpect(status().isNotFound())
+                .andExpect(r -> assertTrue(r.getResolvedException() instanceof ResourceNotFoundException));
     }
 }
