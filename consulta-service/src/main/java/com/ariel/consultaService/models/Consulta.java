@@ -3,6 +3,8 @@ package com.ariel.consultaService.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -12,17 +14,22 @@ public class Consulta {
     private Long id;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
+    @NotNull
     private Date dataAgendada;
+    @NotBlank
     private String comentarios;
 
-    @OneToOne
-    @JoinColumn(name = "animal_id")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "animal_id", nullable = false)
+    @NotNull
     private Animal animal;
 
-    @OneToOne
-    @JoinColumn(name = "veterinario_id")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "veterinario_id", nullable = false)
+    @NotNull
     private Veterinario veterinario;
 
+    @NotNull
     private boolean finalizado;
 
     public Consulta(Date dataAgendada, String comentarios, Animal animal, Veterinario veterinario, boolean finalizado) {
