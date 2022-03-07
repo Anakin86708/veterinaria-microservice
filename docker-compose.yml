@@ -102,4 +102,3 @@ services:
       - "VETERINARIO_SERVICE_URL=http://veterinario-service"
 volumes:
   veterinaria_bd:
-  

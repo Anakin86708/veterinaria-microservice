@@ -3,6 +3,7 @@ package com.ariel.veterinarioService.models;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Veterinario {
@@ -10,8 +11,11 @@ public class Veterinario {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String nome;
+    @NotBlank
     private String endereco;
+    @NotBlank
     private String telefone;
 
     public Veterinario() {
