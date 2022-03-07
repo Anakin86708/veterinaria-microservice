@@ -113,7 +113,7 @@ class ClienteControllerTest {
     }
 
     @Test
-    void updateClienteInalid() throws Exception {
+    void updateClienteInvalid() throws Exception {
         long id = 0L;
         Cliente cliente = spy(new Cliente(null, new Date(Instant.now().toEpochMilli() - 1000), "Rua 1", "123", "teste@mail.com"));
         when(cliente.getId()).thenReturn(id);
