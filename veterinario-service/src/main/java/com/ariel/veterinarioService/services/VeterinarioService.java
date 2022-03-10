@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class VeterinarioService {
 
+    private final VeterinarioRepository repository;
+
     @Autowired
-    private VeterinarioRepository repository;
+    public VeterinarioService(VeterinarioRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Veterinario> getAll() {
         return repository.findAll();
