@@ -3,9 +3,9 @@ package com.ariel.animalService.services;
 import com.ariel.animalService.exceptions.ResourceNotFoundException;
 import com.ariel.animalService.models.Animal;
 import com.ariel.animalService.models.Sexo;
+import com.ariel.animalService.proxies.ClienteProxy;
 import com.ariel.animalService.proxies.EspecieProxy;
 import com.ariel.animalService.repositories.AnimalRepository;
-import com.ariel.animalService.proxies.ClienteProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +14,18 @@ import java.util.List;
 @Service
 public class AnimalService {
 
-    @Autowired
-    private AnimalRepository repository;
+    private final AnimalRepository repository;
+
+    private final EspecieProxy especieProxy;
+
+    private final ClienteProxy clienteProxy;
 
     @Autowired
-    private EspecieProxy especieProxy;
-
-    @Autowired
-    private ClienteProxy clienteProxy;
+    public AnimalService(AnimalRepository repository, EspecieProxy especieProxy, ClienteProxy clienteProxy) {
+        this.repository = repository;
+        this.especieProxy = especieProxy;
+        this.clienteProxy = clienteProxy;
+    }
 
     public List<Animal> getAll() {
         return repository.findAll();
@@ -32,7 +36,9 @@ public class AnimalService {
     }
 
     public List<Animal> getAllByIdCliente(long idCliente) {
-        return repository.findAllByClientePertencenteId(idCliente);
+        if (clienteProxy.retrieveClienteById(idCliente).getId() != null)
+            return repository.findAllByClientePertencenteId(idCliente);
+        throw new ResourceNotFoundException(idCliente);
     }
 
     public Animal insertAnimalForClienteId(Animal animal, long idCliente) {

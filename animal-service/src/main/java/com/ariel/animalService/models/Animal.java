@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Animal {
@@ -42,6 +43,15 @@ public class Animal {
     }
 
     public Animal(String nome, @NotBlank @Size(max = 30) Date dataNascimento, Sexo sexo, Especie especie, Cliente clientePertencente) {
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.sexo = sexo;
+        this.especie = especie;
+        this.clientePertencente = clientePertencente;
+    }
+
+    public Animal(Long id, String nome, @NotBlank @Size(max = 30) Date dataNascimento, Sexo sexo, Especie especie, Cliente clientePertencente) {
+        this.id = id;
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.sexo = sexo;
@@ -91,5 +101,18 @@ public class Animal {
 
     public void setEspecie(Especie especie) {
         this.especie = especie;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return Objects.equals(id, animal.id) && Objects.equals(nome, animal.nome) && Objects.equals(dataNascimento, animal.dataNascimento) && sexo == animal.sexo && Objects.equals(especie, animal.especie) && Objects.equals(clientePertencente, animal.clientePertencente);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, dataNascimento, sexo, especie, clientePertencente);
     }
 }
