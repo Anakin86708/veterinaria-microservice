@@ -1,0 +1,5 @@
+/.trunk/
+/.vscode/
+.hadolint.yaml
+.markdownlint.yaml
+.shellcheckrc

@@ -8,8 +8,4 @@ public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(long id) {
         super(String.format("Unable to find resource with id [%d]", id));
     }
-
-    public ResourceNotFoundException(String name) {
-        super(String.format("Unable to find resource with [%s]", name));
-    }
 }
