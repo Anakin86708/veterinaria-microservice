@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Consulta {
@@ -31,6 +32,15 @@ public class Consulta {
 
     @NotNull
     private boolean finalizado;
+
+    public Consulta(long id, Date dataAgendada, String comentarios, Animal animal, Veterinario veterinario, boolean finalizado) {
+        this.id = id;
+        this.dataAgendada = dataAgendada;
+        this.comentarios = comentarios;
+        this.animal = animal;
+        this.veterinario = veterinario;
+        this.finalizado = finalizado;
+    }
 
     public Consulta(Date dataAgendada, String comentarios, Animal animal, Veterinario veterinario, boolean finalizado) {
         this.dataAgendada = dataAgendada;
@@ -85,5 +95,18 @@ public class Consulta {
 
     public void setAnimal(Animal animal) {
         this.animal = animal;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Consulta consulta = (Consulta) o;
+        return finalizado == consulta.finalizado && Objects.equals(id, consulta.id) && Objects.equals(dataAgendada, consulta.dataAgendada) && Objects.equals(comentarios, consulta.comentarios) && Objects.equals(animal, consulta.animal) && Objects.equals(veterinario, consulta.veterinario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dataAgendada, comentarios, animal, veterinario, finalizado);
     }
 }

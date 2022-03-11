@@ -12,8 +12,12 @@ import java.util.List;
 @Service
 public class EspecieService {
 
+    private final EspecieRepository repository;
+
     @Autowired
-    private EspecieRepository repository;
+    public EspecieService(EspecieRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Especie> getAll() {
         return repository.findAll();
@@ -29,9 +33,6 @@ public class EspecieService {
     }
 
     public Especie insertEspecie(Especie especie) {
-        if (repository.existsByNome(especie.getNome()))
-            throw new DuplicateUniqueResourceException("Espécie with name " + especie.getNome() + " already present");
-
         return saveEspecie(especie);
     }
 
@@ -56,6 +57,8 @@ public class EspecieService {
     }
 
     private Especie saveEspecie(Especie especieDb) {
+        if (repository.existsByNome(especieDb.getNome()))
+            throw new DuplicateUniqueResourceException("Espécie with name " + especieDb.getNome() + " already present");
         return repository.save(especieDb);
     }
 }

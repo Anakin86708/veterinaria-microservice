@@ -16,24 +16,10 @@ import java.net.UnknownHostException;
 @RestController
 public class CustomResponseEntiryExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(DuplicateUniqueResourceException.class)
-    public final ResponseEntity<ExceptionResponse> handleDuplicateUniqueResourceException(Exception e, WebRequest request) {
-        HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-        ExceptionResponse response = new ExceptionResponse(httpStatus, "Unprocessable Entity", e.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, httpStatus);
-    }
-
     @ExceptionHandler({ResourceNotFoundException.class, FeignException.NotFound.class})
     public final ResponseEntity<ExceptionResponse> handleResourceNotFoundException(Exception e, WebRequest request) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         ExceptionResponse response = new ExceptionResponse(httpStatus, "Resource not found", e.getMessage(), request.getDescription(false));
-        return new ResponseEntity<>(response, httpStatus);
-    }
-
-    @ExceptionHandler(ActiveForeignKeyException.class)
-    public final ResponseEntity<ExceptionResponse> handleActiveForeignKeyException(Exception e, WebRequest request) {
-        HttpStatus httpStatus = HttpStatus.UNPROCESSABLE_ENTITY;
-        ExceptionResponse response = new ExceptionResponse(httpStatus, "Unable to delete", e.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(response, httpStatus);
     }
 

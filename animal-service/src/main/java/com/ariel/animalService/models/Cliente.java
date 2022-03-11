@@ -45,6 +45,15 @@ public class Cliente {
     public Cliente() {
     }
 
+    public Cliente(long id, String nome, Date dataNascimento, String endereco, String telefone, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.email = email;
+    }
+
     public Cliente(String nome, Date dataNascimento, String endereco, String telefone, String email) {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
