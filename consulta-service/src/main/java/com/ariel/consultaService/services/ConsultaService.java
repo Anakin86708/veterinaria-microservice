@@ -1,7 +1,9 @@
 package com.ariel.consultaService.services;
 
 import com.ariel.consultaService.exceptions.ResourceNotFoundException;
+import com.ariel.consultaService.models.Animal;
 import com.ariel.consultaService.models.Consulta;
+import com.ariel.consultaService.models.Veterinario;
 import com.ariel.consultaService.proxies.AnimalProxy;
 import com.ariel.consultaService.proxies.VeterinarioProxy;
 import com.ariel.consultaService.repositories.ConsultaRepository;
@@ -13,14 +15,18 @@ import java.util.List;
 @Service
 public class ConsultaService {
 
-    @Autowired
-    private ConsultaRepository repository;
+    private final ConsultaRepository repository;
+
+    private final AnimalProxy animalProxy;
+
+    private final VeterinarioProxy veterinarioProxy;
 
     @Autowired
-    private AnimalProxy animalProxy;
-
-    @Autowired
-    private VeterinarioProxy veterinarioProxy;
+    public ConsultaService(ConsultaRepository repository, AnimalProxy animalProxy, VeterinarioProxy veterinarioProxy) {
+        this.repository = repository;
+        this.animalProxy = animalProxy;
+        this.veterinarioProxy = veterinarioProxy;
+    }
 
     public List<Consulta> getAll() {
         return repository.findAll();
@@ -31,11 +37,17 @@ public class ConsultaService {
     }
 
     public List<Consulta> getConsultasByIdAnimal(long id) {
-        return repository.findAllByAnimal(animalProxy.retrieveAnimalById(id));
+        Animal animal = animalProxy.retrieveAnimalById(id);
+        if (animal != null)
+            return repository.findAllByAnimal(animal);
+        throw new ResourceNotFoundException(id);
     }
 
     public List<Consulta> getConsultasByIdVeterinario(long id) {
-        return repository.findAllByVeterinario(veterinarioProxy.retrieveVeterinarioById(id));
+        Veterinario veterinario = veterinarioProxy.retrieveVeterinarioById(id);
+        if (veterinario != null)
+            return repository.findAllByVeterinario(veterinario);
+        throw new ResourceNotFoundException(id);
     }
 
     public Consulta insertConsulta(Consulta consulta) {
