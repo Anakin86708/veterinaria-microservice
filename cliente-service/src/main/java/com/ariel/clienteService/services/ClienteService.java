@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class ClienteService {
 
+    private final ClienteRepository repository;
+
     @Autowired
-    private ClienteRepository repository;
+    public ClienteService(ClienteRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Cliente> getAll() {
         return repository.findAll();

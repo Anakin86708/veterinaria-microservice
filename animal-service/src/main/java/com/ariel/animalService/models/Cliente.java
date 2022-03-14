@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Cliente {
@@ -43,6 +44,15 @@ public class Cliente {
     private String email;
 
     public Cliente() {
+    }
+
+    public Cliente(long id, String nome, Date dataNascimento, String endereco, String telefone, String email) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.email = email;
     }
 
     public Cliente(String nome, Date dataNascimento, String endereco, String telefone, String email) {
@@ -95,5 +105,30 @@ public class Cliente {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cliente cliente = (Cliente) o;
+        return Objects.equals(id, cliente.id) && Objects.equals(nome, cliente.nome) && Objects.equals(dataNascimento, cliente.dataNascimento) && Objects.equals(endereco, cliente.endereco) && Objects.equals(telefone, cliente.telefone) && Objects.equals(email, cliente.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, dataNascimento, endereco, telefone, email);
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", endereco='" + endereco + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

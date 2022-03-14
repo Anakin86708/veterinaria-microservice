@@ -8,5 +8,4 @@ import java.util.List;
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
     List<Animal> findAllByClientePertencenteId(long id);
 
-    Animal findByClientePertencenteIdAndId(long clientePertencenteId, long id);
 }
