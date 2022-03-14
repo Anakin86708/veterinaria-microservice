@@ -115,4 +115,16 @@ public class Animal {
     public int hashCode() {
         return Objects.hash(id, nome, dataNascimento, sexo, especie, clientePertencente);
     }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", sexo=" + sexo +
+                ", especie=" + especie +
+                ", clientePertencente=" + clientePertencente +
+                '}';
+    }
 }

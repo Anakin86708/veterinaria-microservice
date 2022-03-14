@@ -51,9 +51,12 @@ public class AnimalService {
         Animal animalBd = getById(updatedId);
         animalBd.setNome(animal.getNome());
         animalBd.setDataNascimento(animal.getDataNascimento());
-        animalBd.setEspecie(especieProxy.retrieveEspecieByName(animal.getEspecie().getNome()));
-        animalBd.setClientePertencente(clienteProxy.retrieveClienteById(animal.getClientePertencente().getId()));
-        animalBd.setSexo(Sexo.valueOf(animal.getSexo().name()));
+        if (animal.getEspecie() != null)
+            animalBd.setEspecie(especieProxy.retrieveEspecieByName(animal.getEspecie().getNome()));
+        if (animal.getClientePertencente() != null)
+            animalBd.setClientePertencente(clienteProxy.retrieveClienteById(animal.getClientePertencente().getId()));
+        if (animal.getSexo() != null)
+            animalBd.setSexo(Sexo.valueOf(animal.getSexo().name()));
         return saveAnimal(animalBd);
     }
 

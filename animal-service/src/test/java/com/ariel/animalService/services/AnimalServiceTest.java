@@ -136,6 +136,25 @@ class AnimalServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> animalService.updateAnimal(updatedId, newAnimal));
     }
 
+    /**
+     * Update don't need to save or use data when null.
+     */
+    @Test
+    void assertUpdateAnimalSkipNullData() {
+        long updatedId = 1L;
+        Animal newAnimal = new Animal(updatedId, "Gato 10", null, null, null, null);
+        Animal expected = animais.get(0);
+        expected.setNome(newAnimal.getNome());
+        when(repository.save(any(Animal.class))).thenReturn(newAnimal);
+        setupFindByIdOnMock();
+        AnimalService animalService = new AnimalService(repository, especieProxy, clienteProxy);
+
+        Animal result = animalService.updateAnimal(updatedId, newAnimal);
+
+        verify(repository).save(any(Animal.class));
+        assertEquals(newAnimal, result);
+    }
+
     @Test
     void assertDeleteAnimalIsValid() {
         long id = 1L;
