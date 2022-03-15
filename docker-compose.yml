@@ -11,26 +11,71 @@ services:
       - MYSQL_PASSWORD=1234
     volumes:
       - "veterinaria_bd:/var/lib/mysql:rw"
+    networks:
+      - default_network
+
+  mariadb:
+    image: mariadb
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=${AUTH_DATABASE_NAME}
+      - MYSQL_USER=keycloak
+      - MYSQL_PASSWORD=password
+    volumes:
+      - "auth_bd:/var/lib/mysql:rw"
+    networks:
+      - auth_network
+
+  keycloak:
+    image: jboss/keycloak:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=mariadb
+      - DB_ADDR=mariadb
+      - DB_DATABASE=${AUTH_DATABASE_NAME}
+    depends_on:
+      - mariadb
+    volumes:
+      - "keycloak_data:/opt/jboss/keycloak/standalone/data/"
+    networks:
+      - auth_network
+      - default_network
+
   api-gateway:
     image: "anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT"
     ports:
       - "8765:8765"
     restart: "no"
     depends_on:
+      - keycloak
       - naming-server
       - zipkin
     environment:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+    networks:
+      - default_network
+
   zipkin:
     image: openzipkin/zipkin
     ports:
       - "9411:9411"
     restart: unless-stopped
+    networks:
+      - default_network
+
   naming-server:
     image: "anakin86708/veterinaria-naming-server:0.0.1-SNAPSHOT"
     ports:
       - "8761:8761"
     restart: "no"
+    networks:
+      - default_network
+
   especie-service:
     image: "anakin86708/especie-service:0.0.1-SNAPSHOT"
     expose:
@@ -44,6 +89,9 @@ services:
       - mysql
     environment:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+    networks:
+      - default_network
+
   veterinario-service:
     image: "anakin86708/veterinario-service:0.0.1-SNAPSHOT"
     expose:
@@ -57,6 +105,9 @@ services:
       - mysql
     environment:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+    networks:
+      - default_network
+
   animal-service:
     image: "anakin86708/animal-service:0.0.1-SNAPSHOT"
     expose:
@@ -73,6 +124,9 @@ services:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
       - "CLIENTE_SERVICE_URL=http://cliente-service"
       - "ESPECIE_SERVICE_URL=http://especie-service"
+    networks:
+      - default_network
+
   cliente-service:
     image: "anakin86708/cliente-service:0.0.1-SNAPSHOT"
     expose:
@@ -84,6 +138,9 @@ services:
       - mysql
     environment:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+    networks:
+      - default_network
+
   consulta-service:
     image: "anakin86708/consulta-service:0.0.1-SNAPSHOT"
     expose:
@@ -100,5 +157,14 @@ services:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
       - "ANIMAL_SERVICE_URL=http://animal-service"
       - "VETERINARIO_SERVICE_URL=http://veterinario-service"
+    networks:
+      - default_network
+
 volumes:
   veterinaria_bd:
+  auth_bd:  
+  keycloak_data:
+
+networks:
+  default_network:
+  auth_network:
