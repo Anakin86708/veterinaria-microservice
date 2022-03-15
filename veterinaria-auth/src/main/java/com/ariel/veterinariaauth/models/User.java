@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -29,13 +31,13 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private HashSet<Role> roles = new HashSet<>();
+    private Set<Role> roles = new LinkedHashSet<>();
 
     public User() {
     }
@@ -58,12 +60,12 @@ public class User {
         return id;
     }
 
-    public HashSet<Role> getRoles() {
-        return new HashSet<>(roles);
+    public Set<Role> getRoles() {
+        return new LinkedHashSet<>(roles);
     }
 
-    public void setRoles(HashSet<Role> roles) {
-        this.roles = new HashSet<>(roles);
+    public void setRoles(Set<Role> roles) {
+        this.roles = new LinkedHashSet<>(roles);
     }
 
     public String getPassword() {
