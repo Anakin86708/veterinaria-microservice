@@ -22,6 +22,11 @@ public class EspecieController {
     public EspecieController() {
     }
 
+    @GetMapping("/public")
+    public String hello() {
+        return "Hello";
+    }
+
     @GetMapping()
     public ResponseEntity<List<Especie>> getAllEspecies() {
         return ResponseEntity.ok(especieService.getAll());
