@@ -1,9 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.ariel.apigateway.ApiGatewayApplicationTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1.257 s <<< FAILURE! - in com.ariel.apigateway.ApiGatewayApplicationTests
-contextLoads  Time elapsed: 0.001 s  <<< ERROR!
-java.lang.IllegalStateException: Failed to load ApplicationContext
-Caused by: org.springframework.cloud.config.client.ConfigClientFailFastException: Could not locate PropertySource and the resource is not optional, failing
-Caused by: org.springframework.web.client.HttpServerErrorException$InternalServerError: 500 : "{"timestamp":"2022-02-18T15:45:09.479+00:00","status":500,"error":"Internal Server Error","path":"/api-gateway-veterinaria/default"}"
-
