@@ -33,7 +33,7 @@ public class AnimalController {
 
     @GetMapping("/clientes/{idCliente}")
     public ResponseEntity<List<Animal>> getAllAnimaisFromCliente(@PathVariable long idCliente) {
-        return ResponseEntity.ok(animalService.getAllByIdCliente(idCliente));
+        return ResponseEntity.ok(animalService.getAllByIdCliente(idCliente));  // retorno nao esta correto, feing - outro metodo sobre a parte
     }
 
     @GetMapping("/{id}")
