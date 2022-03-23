@@ -97,6 +97,12 @@ class AnimalControllerITTest {
 
     @Test
     void deleteAnimalById() {
+        long id = 1L;
+        String url = buildUrl("/animais/" + id);
+
+        ResponseEntity<Void> exchange = restTemplate.exchange(url, HttpMethod.DELETE, null, Void.class);
+
+        assertTrue(exchange.getStatusCode().is2xxSuccessful());
     }
 
     private String buildUrl(String uri) {
