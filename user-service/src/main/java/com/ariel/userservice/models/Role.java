@@ -2,11 +2,13 @@ package com.ariel.userservice.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Role {
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -34,5 +36,13 @@ public class Role {
 
     public void setName(ERole name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", name=" + name +
+                '}';
     }
 }

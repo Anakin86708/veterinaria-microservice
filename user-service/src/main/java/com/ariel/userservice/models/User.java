@@ -3,21 +3,27 @@ package com.ariel.userservice.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Entity
 public class User {
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(unique = true)
+    @NotBlank
     private String username;
 
-    @JsonIgnore
+    @NotBlank
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(
+            cascade = CascadeType.PERSIST,
+            fetch = FetchType.EAGER
+    )
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
