@@ -6,9 +6,12 @@ import java.util.HashSet;
 
 @Component
 public class User {
-    private final String username;
-    private final String password;
-    private final HashSet<Role> roles;
+    private String username;
+    private String password;
+    private HashSet<Role> roles;
+
+    public User() {
+    }
 
     public User(String username, String password, HashSet<Role> roles) {
         this.username = username;
