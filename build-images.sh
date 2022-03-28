@@ -1,11 +1,11 @@
 #! /bin/bash
 
-dirs=("veterinaria-naming-server" "animal-service" "api-gateway" "cliente-service" "consulta-service" "especie-service" "veterinario-service")
+dirs=("veterinaria-naming-server" "api-gateway" "user-service" "especie-service" "animal-service"  "cliente-service" "consulta-service" "veterinario-service")
 
 for dir in ${dirs[*]}; do
 	echo "###############################"
 	echo "Build image on ${dir}"
-	mvn -ff -f "${dir}" clean spring-boot:build-image
+	mvn -ff -f "${dir}" clean spring-boot:build-image "${1}"
 	mvn -f "${dir}" clean
 	echo "###############################"
 done

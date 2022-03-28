@@ -1,0 +1,42 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=veterinaria_test
+      - MYSQL_USER=appuser
+      - MYSQL_PASSWORD=1234
+  api-gateway:
+    image: 'anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT'
+    ports:
+      - '8765:8765'
+    restart: 'no'
+    depends_on:
+      - naming-server
+      - zipkin
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - '9411:9411'
+    restart: unless-stopped
+  naming-server:
+    image: 'anakin86708/veterinaria-naming-server:0.0.1-SNAPSHOT'
+    ports:
+      - '8761:8761'
+    restart: 'no'
+  user-service:
+    image: 'anakin86708/user-service:0.0.1-SNAPSHOT'
+    ports:
+      - '8600:8600'
+    depends_on:
+      - naming-server
+      - mysql
+    environment:
+      - 'EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka'
+      - 'database.url=mysql'
+      - 'SPRING.PROFILES.ACTIVE=test'

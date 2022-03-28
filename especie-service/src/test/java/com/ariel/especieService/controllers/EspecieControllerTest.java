@@ -3,6 +3,7 @@ package com.ariel.especieService.controllers;
 import com.ariel.especieService.exceptions.DuplicateUniqueResourceException;
 import com.ariel.especieService.exceptions.ResourceNotFoundException;
 import com.ariel.especieService.models.Especie;
+import com.ariel.especieService.security.services.UserDetailsServiceImpl;
 import com.ariel.especieService.services.EspecieService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -42,6 +43,9 @@ class EspecieControllerTest {
 
     @MockBean
     private EspecieService mockService;
+
+    @MockBean // TODO: mock service
+    private UserDetailsServiceImpl userDetailsService;
 
     @Test
     public void getAllEspeciesValid() throws Exception {

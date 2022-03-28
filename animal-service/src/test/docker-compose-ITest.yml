@@ -9,7 +9,6 @@ services:
       - MYSQL_DATABASE=veterinaria_test
       - MYSQL_USER=appuser
       - MYSQL_PASSWORD=1234
-
   api-gateway:
     image: 'anakin86708/veterinaria-api-gateway:0.0.1-SNAPSHOT'
     ports:
