@@ -24,7 +24,11 @@ public class JwtUtils {
         /*
         Cria o token, vinculado ao usuário.
          */
-        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userPrincipal = new UserDetailsImpl(
+                (String) authentication.getPrincipal(),
+                (String) authentication.getCredentials(),
+                authentication.getAuthorities()
+        );
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
