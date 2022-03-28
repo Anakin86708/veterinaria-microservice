@@ -66,6 +66,7 @@ services:
       - mysql
     environment:
       - "EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://naming-server:8761/eureka"
+      - "USER_SERVICE_URL=http://user-service"
     networks:
       - default_network
       - mysql

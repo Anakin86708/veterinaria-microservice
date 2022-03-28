@@ -39,10 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("**").permitAll()
-//                .antMatchers("/token/**").permitAll()
-//                .antMatchers("/especies/**").authenticated()
-//                .anyRequest().authenticated()
+                .antMatchers("/token/**").permitAll()
+                .antMatchers("/especies/**").authenticated()
                 .and().cors().and().csrf().disable()
         ;
     }
