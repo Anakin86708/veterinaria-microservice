@@ -19,6 +19,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/clientes")
+@CrossOrigin(origins = "*")
 public class ClienteController {
 
     private final ClienteController methodOnClass = methodOn(this.getClass());

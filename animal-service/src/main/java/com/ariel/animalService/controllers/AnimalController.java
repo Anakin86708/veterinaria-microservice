@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/animais")
+@CrossOrigin(origins = "*")
 public class AnimalController {
 
     Logger logger = LoggerFactory.getLogger(AnimalController.class);

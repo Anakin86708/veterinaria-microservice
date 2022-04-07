@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/especies")
+@CrossOrigin
 public class EspecieController {
 
     @Autowired

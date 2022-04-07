@@ -5,21 +5,19 @@ import com.ariel.especieService.models.TokenResponse;
 import com.ariel.especieService.security.services.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/token")
+@CrossOrigin
 public class TokenController {
 
     @Autowired
     private TokenService tokenService;
 
-    @GetMapping()
+    @PostMapping()
     public ResponseEntity<TokenResponse> getToken(@Valid @RequestBody TokenRequest tokenRequest) {
         return ResponseEntity.ok(tokenService.getToken(tokenRequest));
     }
