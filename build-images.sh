@@ -1,6 +1,6 @@
 #! /bin/bash
 
-dirs=("veterinaria-naming-server" "api-gateway" "user-service" "especie-service" "animal-service"  "cliente-service" "consulta-service" "veterinario-service")
+dirs=("veterinaria-naming-server" "animal-service" "api-gateway" "cliente-service" "consulta-service" "especie-service" "veterinario-service")
 
 trap "exit" INT
 for dir in ${dirs[*]}; do
